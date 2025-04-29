@@ -20,6 +20,9 @@ def connect_webdriver(url):
     driver.get(url)
     return driver
 
+def changeUrl(url, webdriver: WebDriver):
+    webdriver.get(url)
+
 def desconectedWebDriver(webdriver: WebDriver):
     time.sleep(5)
     webdriver.quit()
@@ -28,13 +31,15 @@ class ShorHandsSeleniumSelectors:
     def __init__(self, webdriver: WebDriver):
         self.__webdriver = webdriver
     
-    def selectBy(self, keyProp: str, value: str) -> WebElement:
+    def selectBy(self, keyProp: str, value: str, tag=None) -> WebElement:
         """
         Con este metodo puedes seleccionar meta datos
         data-test
         data-name
         """
-        print(f"//*[@{keyProp}='{value}']")
+        if (tag):
+            element = self.__webdriver.find_element(By.XPATH, f"//{tag}[@{keyProp}='{value}']")
+            return element
         element = self.__webdriver.find_element(By.XPATH, f"//*[@{keyProp}='{value}']")
         return element
     
@@ -63,11 +68,18 @@ class ShorHandsSeleniumSelectors:
         """
         result = wait(self.__webdriver, 2).until(EC.element_to_be_clickable(element))
         result.click()
+    
+    def setHtmlCode(self, html):
+        self.__webdriver.execute_script("document.documentElement.innerHTML = arguments[0];", html)
+    
+    def goToUrl(self, url):
+        changeUrl(url, self.__webdriver)
+
 
 
 
 class Products:
-    def __init__(self, sku_base=None, sku_complete=None, name_product=None, style=None, description_large=None, description_short=None, talle=None, color=None, varian_sku=None, stock=None, genere=None, designer=None, material=None, heritage=None, origin=None, use=None, weight_max=None, weight_min=None, composition_percent=None, points_dress=None, care=None, seowords=None, meassures_body=None, price_list=None, price_lower=None, brand=None, images_list=None):
+    def __init__(self, sku_base=None, sku_complete=None, name_product=None, style=None, description_large=None, description_short=None, talle=None, color=None, varian_sku=None, stock=None, genere=None, designer=None, material=None, heritage=None, origin='ARG', use=None, weight_max=None, weight_min=None, composition_percent=None, points_dress=None, care=None, seowords=None, meassures_body=None, price_list=None, price_lower=None, brand=None, images_list=None, url=None, category=None, subcategory = None):
         self.sku_base = sku_base
         self.sku_complete = sku_complete
         self.name_product = name_product
@@ -95,6 +107,9 @@ class Products:
         self.price_lower = price_lower
         self.brand = brand
         self.images_list = images_list
+        self.url = url
+        self.category = category
+        self.subcategory = subcategory
 
     def set_attribute(self, attribute_name, value):
         if hasattr(self, attribute_name):
@@ -104,23 +119,24 @@ class Products:
 
     def get_attributes(self):
         return self.__dict__
+    
+    def goToProduct(self, webDriver: ShorHandsSeleniumSelectors):
+        webDriver.goToUrl(self.url)
 
 
 class Subcategory:
     """
         usar este objecto ayuda a generar nodos de busqueda
     """
-    def __init__(self, name, element: WebElement, urlSubcategory, categoryName, extrafields, products: list = []):
+    def __init__(self, name, urlSubcategory, categoryName, extrafields = {}, products: list = []):
         self.name = name
         self.url = urlSubcategory
-        self.element = element
         self.category = categoryName
         self.extras = extrafields
         self.products = products
 
-    def goToSubCatory(self, webDriver: WebDriver):
-        result = wait(webDriver, 2).until(EC.element_to_be_clickable(self.element))
-        result.click()
+    def goToSubCatory(self, webDriver: ShorHandsSeleniumSelectors):
+        webDriver.goToUrl(self.url)
     
     def set_product(self, product: Products):
         self.products.append(product)
