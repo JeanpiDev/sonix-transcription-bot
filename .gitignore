@@ -2,3 +2,13 @@
 **/__pycache__
 csv
 .env
+.claude
+
+# Inputs y outputs reales (pueden contener datos personales)
+input_files/*
+!input_files/.gitkeep
+transcriptions/*
+!transcriptions/.gitkeep
+
+# Debug artefacts
+**/_debug_*.html
