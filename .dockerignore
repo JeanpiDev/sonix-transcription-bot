@@ -1,0 +1,7 @@
+.venv
+**/__pycache__
+.git
+.env
+.claude
+transcriptions/*
+*.md

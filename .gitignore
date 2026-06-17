@@ -4,11 +4,6 @@ csv
 .env
 .claude
 
-# Inputs y outputs reales (pueden contener datos personales)
-input_files/*
-!input_files/.gitkeep
+# Cache de transcripciones (puede contener datos personales)
 transcriptions/*
 !transcriptions/.gitkeep
-
-# Debug artefacts
-**/_debug_*.html

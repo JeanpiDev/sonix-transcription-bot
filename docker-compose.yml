@@ -1,0 +1,12 @@
+services:
+  transcriber:
+    build: .
+    env_file: .env
+    ports:
+      - "8000:8000"
+    # Persiste la cache de transcripciones (.txt) entre reinicios del contenedor.
+    volumes:
+      - ./transcriptions:/app/transcriptions
+    # Chromium headless puede agotar /dev/shm con su default de 64MB.
+    shm_size: "1gb"
+    restart: unless-stopped
