@@ -99,9 +99,22 @@ Dockerfile
 docker-compose.yml
 ```
 
+## Desarrollo
+
+Instala las dependencias de desarrollo (incluyen las de runtime) y corre el linter y los tests:
+
+```bash
+pip install -r requirements-dev.txt
+
+ruff check .        # linter
+ruff format .       # formateo (opcional)
+pytest              # tests
+```
+
+Los tests cubren las funciones puras (cache por hash, helpers del scraper) y los endpoints FastAPI **con el scraper de Sonix mockeado**, así que no tocan Sonix ni abren Chrome. La configuración de `ruff` y `pytest` vive en `pyproject.toml`.
+
 ## Notas
 
-- Sin tests automatizados ni linter configurado.
 - **Las peticiones a Sonix se serializan**: el scraper maneja una sola sesión de navegador a la vez, así que las llamadas concurrentes a `/transcribe` (y `/folder/cleanup`) esperan turno. Manda varios archivos en una sola petición para transcribirlos en bloque.
 - Headless por defecto. Para ver el navegador en local: `SONIX_HEADLESS=false`.
 - Si Sonix marca un upload como duplicado, el pipeline prueba primero el ID "no duplicado" y cae a candidatos alternativos.

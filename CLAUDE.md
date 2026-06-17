@@ -23,7 +23,15 @@ docker compose up --build
 
 Copiar `.env.example` a `.env`. Variables: `SONIX_EMAIL`, `SONIX_PASSWORD`, `SONIX_FOLDER_ID` (obligatorias); `SONIX_HEADLESS` (default `true`), `SONIX_CACHE_DIR` (default `transcriptions`).
 
-No hay suite de tests ni linter configurado.
+### Tests y linter
+
+```powershell
+pip install -r requirements-dev.txt
+ruff check .     # linter
+pytest           # tests
+```
+
+Config de `ruff` y `pytest` en `pyproject.toml`. Los tests (`tests/`) cubren las funciones puras (cache, helpers) y los endpoints con el scraper **mockeado** (`monkeypatch` sobre `app.main.get_settings` y `app.main.sonix_transcriber.transcribe`), así que no tocan Sonix ni abren Chrome. Al añadir lógica al scraper, mockea Selenium/red en los tests para mantenerlos rápidos y sin dependencias externas.
 
 ## Tecnologías
 

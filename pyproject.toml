@@ -1,0 +1,16 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# F = pyflakes (bugs reales: imports/vars sin usar), I = orden de imports,
+# E = pycodestyle, UP = pyupgrade.
+select = ["E", "F", "I", "UP"]
+# E501 (longitud de línea) y E221 (espacios alineando el operador `=`) se ignoran
+# a propósito: el módulo del scraper alinea sus constantes en columnas por claridad.
+ignore = ["E501", "E221"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

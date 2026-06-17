@@ -5,3 +5,8 @@
 .claude
 transcriptions/*
 *.md
+tests/
+pyproject.toml
+requirements-dev.txt
+**/.pytest_cache
+**/.ruff_cache
